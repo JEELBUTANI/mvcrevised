@@ -6,8 +6,8 @@ class Controller_Vendor extends Controller_Core_Action
 	{
 		$query = "SELECT * FROM `vendor`";
 		$adapter = $this->getAdapter();
-		$products = $adapter->fetchAll($query);
-		if (!$products) {
+		$vendors = $adapter->fetchAll($query);
+		if (!$vendors) {
 			throw new Exception("products not found.", 1);
 		}
 		require_once 'view/vendor/grid.phtml';
@@ -34,14 +34,14 @@ class Controller_Vendor extends Controller_Core_Action
 		$id = $request->getParams('id');
 		$query = "SELECT * FROM `vendor` WHERE `vendor_id`={$id}";
 		$adapter = $this->getAdapter();
-		$product = $adapter->fetchRow($query);
+		$vendor = $adapter->fetchRow($query);
 		require_once 'view/vendor/edit.phtml';
 	}
 
 	public function updateAction()
 	{
 			$request = $this->getRequest();
-			$productData = $request->getPost();
+			$vendorData = $request->getPost();
 			$id = $request->getParams('id');
 			$query = "UPDATE `vendor` SET 
 							`name`='$vendorData[name]',
@@ -61,6 +61,5 @@ class Controller_Vendor extends Controller_Core_Action
 		$adapter->update($query);
 		header("Location:index.php?c=vendor&a=grid");
 	}
-
 }
 ?>
