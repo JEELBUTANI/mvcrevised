@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Vendor </title>
+</head>
+<body>
+	<?php require 'view/html/header.phtml'; ?>
+	<table class="table">
+		<tr>
+			<th>Manage Vendor</th>
+			<th> <button class="btn btn-secondary"> <a href="index.php?c=vendor&a=add">ADD</a> </button></th>
+		</tr>
+	</table>
+	<table class="table">
+		<tr>
+			<th>Vendor ID</th>
+			<th>Vendor NAME</th>
+			<th>ADDRESS</th>
+			<th>CREATED AT</th>
+			<th>UPDATED AT</th>
+			<th>EDIT</th>
+			<th>DELETE</th>
+		</tr>
+	<?php foreach ($vendors as $vendor): ?>
+		<tr>
+			<td><?php echo $vendor['vendor_id']; ?></td>
+			<td><?php echo $vendor['name']; ?></td>
+			<td><?php echo $vendor['address']; ?></td>
+			<td><?php echo $vendor['created_at']; ?></td>
+			<td><?php echo $vendor['updated_at']; ?></td>
+			<td> <a href="index.php?c=vendor&a=edit&id=<?php echo $vendor['vendor_id']; ?>">EDIT</a> </td>
+			<td> <a href="index.php?c=vendor&a=delete&id=<?php echo $vendor['vendor_id']; ?>">DELETE</a> </td>
+		</tr>
+	<?php endforeach; ?>
+	</table>
+</body>
+</html>

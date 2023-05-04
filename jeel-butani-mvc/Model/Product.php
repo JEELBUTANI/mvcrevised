@@ -1,11 +1,12 @@
 <?php 
 
-class Model_Product extends AnotherClass
+class Model_Product extends Model_Core_Table;
 {
 	
-	function __construct(argument)
+	function __construct()
 	{
-		// code...
+		parent::__construct();
+		$this->setTableName('product')->setPrimaryKey('product_id');
 	}
 }
 

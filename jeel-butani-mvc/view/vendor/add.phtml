@@ -6,17 +6,16 @@
 	<title>ADD</title>
 </head>
 <body>
-
 	<?php require 'view/html/header.phtml'; ?>
 	<table class="table">
 		<tr>
-			<th>Product Add</th>
+			<th>Vendor Add</th>
 		</tr>
 	</table>
-	<form action="index.php?c=product&a=insert" method="POST">
+	<form action="index.php?c=vendor&a=insert" method="POST">
 		<table class="table">
 			<tr>
-				<td>PRODUCT NAME</td>
+				<td>Vendor NAME</td>
 				<td> <input type="text" name="name"> </td>
 			</tr>
 			<tr>
@@ -36,7 +35,7 @@
 				<td> <input type="text" name="quantity"> </td>
 			</tr>
 			<tr>
-				<td>DISCRIPTION</td>
+				<td>DESCRIPTION</td>
 				<td> <input type="text" name="description"> </td>
 			</tr>
 			<tr>
@@ -50,7 +49,6 @@
 
 				</td>
 			</tr>
-		
 			<tr>
 				<td>COLOR</td>
 				<td> <input type="text" name="color"> </td>
@@ -65,6 +63,5 @@
 			</tr>
 		</table>
 	</form>
-
 </body>
 </html>

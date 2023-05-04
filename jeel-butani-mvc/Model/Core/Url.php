@@ -17,7 +17,6 @@ class Model_Core_Url
 	    if ($resetParams) {
 	    	$final = [];
 	    }
-
 	    if ($controller) {
 	        $final['c'] = $controller;
 	    }
@@ -35,7 +34,6 @@ class Model_Core_Url
 	    if ($params) {
 	        $final = array_merge($final, $params);
 	    }
-
 	    $newQueryString = http_build_query($final);
 	    $newUrl = str_replace($queryString, $newQueryString, $url);
 	    return $newUrl;
