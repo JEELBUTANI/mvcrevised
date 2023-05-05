@@ -2,71 +2,89 @@
 
 class Controller_Product extends Controller_Core_Action 
 {
+	
 	public function gridAction()
 	{
-		$query = "SELECT * FROM `product`";
-		$adapter = $this->getAdapter();
-		$products = $adapter->fetchAll($query);
-		if (!$products) {
-			throw new Exception("products not found.", 1);
+		try {
+			$query = "SELECT * FROM `product`";
+			$products = Ccc::getModel('Product_Row')->fetchAll($query);
+			if (!$products) {
+				throw new Exception("Product not found.", 1);
+			}
+			$this->getView()->setTemplate('product/grid.phtml')->setData(['products'=>$products]);
+			$this->render();
+		} catch (Exception $e) {
+			
 		}
-		require_once 'view/product/grid.phtml';
 	}
 
 	public function addAction()
 	{
-		require_once 'view/product/add.phtml';
-	}
-
-	public function insertAction()
-	{
-			$request = $this->getRequest();
-			$productData = $request->getPost();
-			$query = "INSERT INTO `product`(`name`, `cost`, `SKU`, `price`, `quantity`, `description`, `status`, `color`, `material`) VALUES ('$productData[name]','$productData[cost]','$productData[SKU]','$productData[price]','$productData[quantity]','$productData[description]','$productData[status]','$productData[color]','$productData[material]')";
-			$adapter = new Model_Core_Adapter();
-			$result = $adapter->insert($query);
-			header("Location:index.php?c=product&a=grid");
+		$this->getView()->setTemplate('product/add.phtml');
+		$this->render();
 	}
 
 	public function editAction()
 	{
-		$request = $this->getRequest();
-		$id = $request->getParams('id');
-		$query = "SELECT * FROM `product` WHERE `product_id`={$id}";
-		$adapter = $this->getAdapter();
-		$product = $adapter->fetchRow($query);
-		require_once 'view/product/edit.phtml';
+		try {
+			$id = $this->getRequest()->getParams('id');
+			$product = Ccc::getModel('Product_Row')->load($id);
+			$this->getView()->setTemplate('product/edit.phtml')->setData(['product' =>$product]);
+			$this->render();
+		} catch (Exception $e) {
+			
+		}
 	}
 
-	public function updateAction()
+	public function saveAction()
 	{
-			$request = $this->getRequest();
-			$productData = $request->getPost();
-			$id = $request->getParams('id');
-			$query = "UPDATE `product` SET 
-							`name`='$productData[name]',
-							`cost`='$productData[cost]',
-							`SKU`='$productData[SKU]',
-							`price`='$productData[price]',
-							`quantity`='$productData[quantity]',
-							`description`='$productData[description]',
-							`status`='$productData[status]',
-							`color`='$productData[color]',
-							`material`='$productData[material]' 
-							WHERE `product_id` = {$id}";
-			$adapter = $this->getAdapter();
-			$adapter->update($query);
-			header("Location:index.php?c=product&a=grid");
+		try {
+			if (!$this->getRequest()->isPost()) {
+				throw new Exception("Invalid Request.", 1);
+			}
+			$postData = $this->getRequest()->getPost('product');
+
+			if ($id = $this->getRequest()->getParams('id')) {
+				$product = Ccc::getModel('Product_Row')->load($id);
+				if (!$product) {
+					throw new Exception("Product not found.", 1);
+				}
+				$product->updated_at = date('Y-m-d H:i:s');
+			}
+			else{
+				$product = Ccc::getModel('product_Row');
+				if (!$product) {
+					throw new Exception("Product not found", 1);
+				}
+				$product->created_at = date("Y-m-d H-i-s");
+			}
+			$product->setData($postData);
+			if (!$product->save()) {
+				throw new Exception("Product not saved.", 1);
+			}
+			$this->redirect('grid','product',null,true);
+		} catch (Exception $e) {
+				
+		}
 	}
+
 
 	public function deleteAction()
 	{
-		$request = $this->getRequest();
-		$id = $request->getParams('id');
-		$query = "DELETE FROM `product` WHERE `product_id` = {$id}";
-		$adapter = $this->getAdapter();
-		$adapter->update($query);
-		header("Location:index.php?c=Product&a=grid");
+		try {
+			if (!($id = (int)$this->getRequest()->getParams('id'))) {
+				throw new Exception("Id not found", 1);
+			}
+			$product = Ccc::getModel('Product_Row')->load($id);
+			if (!$product) {
+				throw new Exception("Product not found", 1);
+			}
+			$product->delete();
+			
+		} catch (Exception $e) {
+			
+		}
+	$this->redirect('grid','product',null,true);
 	}
 
 }

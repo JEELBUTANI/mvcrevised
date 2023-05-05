@@ -11,62 +11,60 @@
 	<?php require 'view/html/header.phtml'; ?>
 	<table class="table">
 		<tr>
-			<th>Vendor Add</th>
+			<th>SALESMAN ADD</th>
 		</tr>
 	</table>
-	<form action="index.php?c=vendor&a=save" method="POST">
+	<form action="index.php?c=salesman&a=save" method="POST">
 		<tr>
-			<th> <button> <a href="index.php?c=vendor&a=grid">CANCEL</a> </button></th>
+			<th> <button> <a href="index.php?c=salesman&a=grid">CANCEL</a> </button></th>
 			<th> <button type="submit"> SAVE </button></th>
 		</tr>
 		<table class="table">
 			<tr>
 				<td>FIRST NAME</td>
-				<td> <input type="text" name="vendor[first_name]"> </td>
+				<td> <input type="text" name="salesman[first_name]"> </td>
 			</tr>
 			<tr>
 				<td>LAST NAME</td>
-				<td> <input type="text" name="vendor[last_name]"> </td>
+				<td> <input type="text" name="salesman[last_name]"> </td>
 			</tr>
 			<tr>
 				<td>EMAIL</td>
-				<td> <input type="text" name="vendor[email]"> </td>
+				<td> <input type="text" name="salesman[email]"> </td>
 			</tr>
 			<tr>
 				<td>GENDER</td>
 				<td>
-					<select name="vendor[gender]">
+					<select name="salesman[gender]">
 						<option value="">SELECT GENDER</option>
 						<option>MALE</option>
 						<option>FEMALE</option>
 					</select>
-
 				</td>
 			</tr>
 			<tr>
 				<td>MOBILE</td>
-				<td> <input type="text" name="vendor[mobile]"> </td>
+				<td> <input type="text" name="salesman[mobile]"> </td>
 			</tr>
 			<tr]>
 				<td>STATUS</td>
 				<td>
-					<select name="vendor[status]">
+					<select name="salesman[status]">
 						<option value="1">ACTIVE</option>
 						<option value="2">INACTIVE</option>
 					</select>
-
 				</td>
 			</tr>
 			<tr>
 				<td>COMPANY</td>
-				<td> <input type="text" name="vendor[company]"> </td>
+				<td> <input type="text" name="salesman[company]"> </td>
 			</tr>
 			
 		</table>
 
 		<table class="table">
 		<tr>
-			<th>Vendor Address</th>
+			<th>salesman Address</th>
 		</tr>
 	</table>
 		<table class="table">
@@ -91,8 +89,6 @@
 				<td> <input type="text" name="address[zip_code]" >  </td>
 			</tr>
 		</table>
-
 	</form>
-
 </body>
 </html>

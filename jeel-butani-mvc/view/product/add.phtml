@@ -13,55 +13,53 @@
 			<th>Product Add</th>
 		</tr>
 	</table>
-	<form action="index.php?c=product&a=insert" method="POST">
+	<form action="index.php?c=product&a=save" method="POST">
 		<table class="table">
 			<tr>
 				<td>PRODUCT NAME</td>
-				<td> <input type="text" name="name"> </td>
+				<td> <input type="text" name="product[name]"> </td>
 			</tr>
 			<tr>
 				<td>COST</td>
-				<td> <input type="text" name="cost"> </td>
+				<td> <input type="text" name="product[cost]"> </td>
 			</tr>
 			<tr>
 				<td>SKU</td>
-				<td> <input type="text" name="sku"> </td>
+				<td> <input type="text" name="product[SKU]"> </td>
 			</tr>
 			<tr>
 				<td>PRICE</td>
-				<td> <input type="text" name="price"> </td>
+				<td> <input type="text" name="product[price]"> </td>
 			</tr>
 			<tr>
 				<td>Quantity</td>
-				<td> <input type="text" name="quantity"> </td>
+				<td> <input type="text" name="product[quantity]"> </td>
 			</tr>
 			<tr>
 				<td>DISCRIPTION</td>
-				<td> <input type="text" name="description"> </td>
+				<td> <input type="text" name="product[description]"> </td>
 			</tr>
 			<tr>
 				<td>STATUS</td>
 				<td>
-					<select name="status">
-						<option value="">SELECT STATUS</option>
-						<option>ACTIVE</option>
-						<option>INACTIVE</option>
+					<select name="product[status]">
+						<option value="1">ACTIVE</option>
+						<option value="2">INACTIVE</option>
 					</select>
 
 				</td>
 			</tr>
-		
 			<tr>
 				<td>COLOR</td>
-				<td> <input type="text" name="color"> </td>
+				<td> <input type="text" name="product[color]"> </td>
 			</tr>
 			<tr>
 				<td>MATERIAL</td>
-				<td> <input type="text" name="material"> </td>
+				<td> <input type="text" name="product[material]"> </td>
 			</tr>
 			<tr>
-				<th> <button class="btn btn-secondary"> <a href="index.php?c=product&a=grid">CANCEL</a> </button></th>
-				<th> <button class="btn btn-secondary" type="submit"> SAVE </button></th>
+				<th> <button> <a href="index.php?c=product&a=grid">CANCEL</a> </button></th>
+				<th> <button type="submit"> SAVE </button></th>
 			</tr>
 		</table>
 	</form>

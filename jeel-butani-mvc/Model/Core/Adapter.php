@@ -1,76 +1,81 @@
 <?php
-class Model_Core_Adapter 
-{
-	
-	public $servername = "localhost";
-	public $username = "root";
-	public $password = "";
-	public $dbname = "newmvc-jeel-butani";
 
-	//to make connection
+class Model_Core_Adapter
+{
+	public $config = [
+		'host' => 'localhost',
+		'username' => 'root',
+		'password' => '',
+		'dbname' => 'newmvc-jeel-butani',
+	];
+
+	protected $connect = null;
+
 	public function connect()
 	{
-		$connection=mysqli_connect($this->servername,$this->username,$this->password,$this->dbname);
-		return $connection;
-	}
-
-	//to run query
-	public function query($query)
-	{
-		$connect=$this->connect();
-		return $connect->query($query);
+		if ($this->connect != null) {
+			return $this->connect;
+		}
+		else{
+			$connect = mysqli_connect(
+				$this->config['host'],
+				$this->config['username'],
+				$this->config['password'],
+				$this->config['dbname']
+			);
+			$this->connect = $connect;
+			return $connect;
+		}
 	}
 
 	public function fetchAll($query)
 	{
-		$fetchAll=$this->query($query);
-		if (!$fetchAll) {
+		$connect = $this->connect();
+		$result = mysqli_query($connect,$query);
+		if ($result->num_rows == 0) {
 			return false;
 		}
-		return $fetchAll->fetch_all(MYSQLI_ASSOC);
+		return $result->fetch_all(MYSQLI_ASSOC);
 	}
-
 
 	public function fetchRow($query)
 	{
-		$fetchRow=$this->query($query);
-		if (!$fetchRow) {
-			return false;
+		$connect = $this->connect();
+		$result = mysqli_query($connect,$query);
+		if (!$result->num_rows == 0) {
+			return $result->fetch_assoc(); 
 		}
-		return $fetchRow->fetch_assoc();
+		return null;
 	}
 
-	public function insert($query)
-	{
+	public function insert($query){
 		$connect = $this->connect();
-		$insertRow = $connect->query($query);
-		if (!$insertRow) {
-				return false;
+		$result = mysqli_query($connect,$query);
+		if ($result) {
+			return $connect->insert_id;
 		}
-		return $connect->insert_id;
+			return false;
 	}
 
 	public function update($query)
 	{
-		$updateRow = $this->query($query);
-		if (!$updateRow) {
-			return false;
+		$connect = $this->connect();
+		$result = mysqli_query($connect,$query);
+		if ($result) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	public function delete($query)
 	{
-		$deleteRow = $this->query($query);
-		if(!$deleteRow){
-			return false;
+		$connect = $this->connect();
+		$result = mysqli_query($connect,$query);
+		if ($result) {
+			return true;
 		}
-		return true;
+		return false;
 	}
-
-
-
 }
-
 
 ?>

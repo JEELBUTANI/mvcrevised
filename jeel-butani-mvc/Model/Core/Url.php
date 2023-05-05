@@ -1,43 +1,42 @@
-<?php 
-require_once 'Model/Core/Request.php';
+<?php
 
 class Model_Core_Url
 {
-	public function getCurrentUrl()
+	public function getUrl($action = null,$controller = null,$params = [], $reset  = false)
 	{
-		 return $_SERVER['REQUEST_SCHEME']."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-	}
+	   $request = new Model_Core_Request();
 
-	public function getUrl($action = null, $controller = null, $params = [], $resetParams = false) 
-	{
-	    $url = $this->getCurrentUrl();
-	    $queryString = $_SERVER['QUERY_STRING'];
-	    $request = Ccc::getModel('Core_Request');
-	    $final = $request->getParams();
-	    if ($resetParams) {
-	    	$final = [];
-	    }
-	    if ($controller) {
-	        $final['c'] = $controller;
-	    }
-	    else{
-	    	$final['c'] = $request->getControllerName();
-	    }
+	   $final = $request->getParams();
 
-	    if ($action) {
-	        $final['a'] = $action;
-	    }
-	    else{
-	    	$final['a'] = $request->getActionName();
-	    }
+	   if ($reset) {
+	   	$final = [];
+	   }
 
-	    if ($params) {
-	        $final = array_merge($final, $params);
-	    }
-	    $newQueryString = http_build_query($final);
-	    $newUrl = str_replace($queryString, $newQueryString, $url);
-	    return $newUrl;
+	   if ($controller) {
+	   		$final['c'] = $controller; 
+	   }
+	   else{
+	   		$final['c'] =$request->getControllerName();
+	   }
+
+	   if ($action) {
+	   	   $final['a'] = $action;
+	   }
+	   else{
+	   	   $final['a'] = $request->getActionName();
+	   }
+
+	   if ($params) {
+	   	   $final = array_merge($final,$params);
+	   }
+
+	   $queryString = http_build_query($final);
+	   $requestUri = trim($_SERVER['REQUEST_URI'],$_SERVER['QUERY_STRING']);
+
+	   $url = $_SERVER['REQUEST_SCHEME'].'://'. $_SERVER['HTTP_HOST'].$requestUri.$queryString;
+
+	   return $url;
 	}
 }
 
-?>
+

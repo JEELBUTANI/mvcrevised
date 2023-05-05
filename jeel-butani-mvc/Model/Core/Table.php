@@ -1,24 +1,14 @@
 <?php
-class Model_Core_Table
-{
+
+class Model_Core_Table{
+
 	protected $tableName = null;
-	protected $primaryKey = null;
+	protected $primaryKey  = null;
 	protected $adapter = null;
 
-	protected function setAdapter($adapter)
+	function __construct()
 	{
-		$this->adapter = $adapter;
-		return $this;
-	}
-
-	public function getAdapter()
-	{
-		if ($this->adapter) {
-			return $this->adapter;
-		}
-		$adapter = Ccc::getModel('Core_Adapter');
-		$this->setAdapter($adapter);
-		return $adapter;
+		
 	}
 
 	public function setTableName($tableName)
@@ -26,7 +16,7 @@ class Model_Core_Table
 		$this->tableName = $tableName;
 		return $this;
 	}
-
+	
 	public function getTableName()
 	{
 		return $this->tableName;
@@ -43,82 +33,89 @@ class Model_Core_Table
 		return $this->primaryKey;
 	}
 
-	public function fetchAll($query)
+	protected function setAdapter($adapter)
 	{
-		return $this->getAdapter()->fetchAll($query);
+		$this->adapter = $adapter;
+		return $this;
 	}
 
-	public function fetchRow($query)
+	public function getAdapter()
 	{
-		return $this->getAdapter()->fetchRow($query);
+		if ($this->adapter) {
+			return $this->adapter;
+		}
+		$adapter = new Model_Core_Adapter();
+		$this->setAdapter($adapter);
+		return $adapter;
+	}
+
+	public function fetchAll($query)
+	{
+		$result = $this->getAdapter()->fetchAll($query);
+		if (!$result) {
+			return false;
+		}
+		return $result;
+	}
+
+	public function fetchRow($query){
+		if ($query) {
+		return $this->getAdapter()->fetchRow($query);	
+		}
+
+		throw new Exception("Error Processing Request", 1);
+		
 	}
 
 	public function insert($data)
 	{
 		$keys = array_keys($data);
-		$columns = "`".implode("`,`", $keys)."`";
-		$values = "'".implode("','", $data)."'";
-		$query = "INSERT INTO `{$this->getTableName()}`({$columns}) VALUES ({$values})";
-		return $this->getAdapter()->insert($query);
+		$values = array_values($data);
+		
+		$keyString = '`'.implode('`,`', $keys).'`';
+		$valueString = "'".implode("','", $values)."'";
+
+		$sql = "INSERT INTO `{$this->getTableName()}` ({$keyString}) VALUES ({$valueString})";
+		// print_r($sql);
+		// die();
+		return $this->getAdapter()->insert($sql);
 	}
 
 	public function update($data, $conditions)
 	{
-		$dataString = "";
-		foreach($data as $key => $value){
-    		$dataString .= "`".$key."` = '".$value."', ";
+		foreach ($data as $key => $value) {
+			$keys[] = "`$key`='$value'";
 		}
-		$dataString = rtrim($dataString, ", "); 
-		if (!is_array($conditions)) {
-			$query = "UPDATE `{$this->getTableName()}` SET {$dataString}";
-			return $this->getAdapter()->update($query);
+		$keyvaluestring = implode(',', $keys);
+
+		foreach ($conditions as $key => $value) {
+			$conditionArray[] = "`$key`='$value'";
 		}
-		$keys = array_keys($conditions);
-		$values = array_values($conditions);
-		$condition = "";
-		if (count($keys) != 1) {
-			for ($i=0; $i < count($keys); $i++) {
-				$condition .= "`".$keys[$i]."` = '".$values[$i]."' AND ";
-			}
-			$condition = rtrim($condition, " AND");
-		}
-		else {
-			if (!is_array($values[0])) {
-				for ($i=0; $i < count($keys); $i++) { 
-					$condition = "`".$keys[$i]."` = '".$values[$i]."'";
-				}
-			}
-			else {
-				$valueString = implode(',', $values[0]);
-				$condition = "`".$keys[0]."` IN (".$valueString.")";
-			}
-		}
-		$query = "UPDATE `{$this->getTableName()}` SET {$dataString} WHERE {$condition}";
-		return $this->getAdapter()->update($query);	
+		$primaryKeyString = implode('AND', $conditionArray);
+		$sql = "UPDATE `{$this->getTableName()}` SET {$keyvaluestring} WHERE {$primaryKeyString}";
+		return $this->getAdapter()->update($sql);
 	}
+
 	public function delete($conditions)
 	{
-		$keys = array_keys($conditions);
-		$values = array_values($conditions);
-		if (count($keys) != 1) {
-			for ($i=0; $i < count($keys); $i++) {
-				$condition .= "`".$keys[$i]."` = '".$values[$i]."' AND ";
-			}
-			$condition = rtrim($condition, " AND");
+		foreach ($conditions as $key => $value)
+		{
+			$conditionArray[] = " `$key` = '$value'";
 		}
-		else {
-			if (!is_array($values[0])) {
-				for ($i=0; $i < count($keys); $i++) { 
-					$condition = "`".$keys[$i]."` = '".$values[$i]."'";
-				}
-			}
-			else {
-				$valueString = implode(',', $values[0]);
-				$condition = "`".$keys[0]."` IN (".$valueString.")";
-			}
-		}
-		$query = "DELETE FROM `{$this->tableName}` WHERE {$condition}";
+
+		$keyString = implode('AND',$conditionArray);
+
+		$query = "DELETE FROM `{$this->getTableName()}` WHERE {$keyString}";
 		return $this->getAdapter()->delete($query);
+    }
+
+	public function load($value,$column=null)
+	{
+		$column = (!column) ? $this->getPrimaryKey() : $column;
+		$query = "SELECT * FROM `{$this->getTableName()}` WHERE `{$column}` = {$value}";
+		$row = $this->getAdapter()->fetchRow($query);
+		return $row;
 	}
 }
+
 ?>
