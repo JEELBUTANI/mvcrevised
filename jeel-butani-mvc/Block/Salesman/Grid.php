@@ -9,7 +9,7 @@ class Block_Salesman_Grid extends Block_Core_Grid
 		$this->_prepareColumns();
 		$this->_prepareActions();
 		$this->_prepareButtons();
-		$this->setTitle('Manage Salesman Method');
+		$this->setTitle('Manage Salesman');
 	}
 	public function getCollection()
 	{
