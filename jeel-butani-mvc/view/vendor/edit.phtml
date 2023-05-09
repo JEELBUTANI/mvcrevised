@@ -2,9 +2,7 @@
 $vendor = $this->vendor;
 $vendorAddress = $this->vendorAddress;
 ?>
-
 <!DOCTYPE html>
-
 <html>
 <head>
 	<meta charset="utf-8">
@@ -12,8 +10,6 @@ $vendorAddress = $this->vendorAddress;
 	<title>ADD</title>
 </head>
 <body>
-
-
 	<table class="table table-striped">
 		<tr>
 			<th>Vendor Edit</th>
@@ -60,7 +56,6 @@ $vendorAddress = $this->vendorAddress;
 
 				</td>
 			</tr>
-			
 			<tr>
 				<td>COMPANY</td>
 				<td> <input type="text" name="vendor[company]" value="<?php echo $vendor->company ?>">  </td>
@@ -90,20 +85,10 @@ $vendorAddress = $this->vendorAddress;
 				<td> <input type="text" name="address[state]" value="<?php echo $vendorAddress->state ?>">  </td>
 			</tr>
 			<tr>
-				<td>COMPANY</td>
-				<td> <input type="text" name="address[country]" value="<?php echo $vendorAddress->country ?>">  </td>
-			</tr>
-			<tr>
 				<td>ZIP CODE</td>
 				<td> <input type="text" name="address[zip_code]" value="<?php echo $vendorAddress->zip_code ?>">  </td>
 			</tr>
-
-
-				
 		</table>
-
-
 	</form>
-
 </body>
 </html>
