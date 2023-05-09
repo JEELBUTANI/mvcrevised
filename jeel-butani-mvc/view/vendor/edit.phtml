@@ -57,10 +57,6 @@ $vendorAddress = $this->vendorAddress;
 				</td>
 			</tr>
 			<tr>
-				<td>COMPANY</td>
-				<td> <input type="text" name="vendor[company]" value="<?php echo $vendor->company ?>">  </td>
-			</tr>
-			<tr>
 				<th> <button> <a href="index.php?c=vendor&a=grid">CANCEL</a> </button></th>
 				<th> <button type="submit"> SAVE </button></th>
 			</tr>
@@ -85,6 +81,9 @@ $vendorAddress = $this->vendorAddress;
 				<td> <input type="text" name="address[state]" value="<?php echo $vendorAddress->state ?>">  </td>
 			</tr>
 			<tr>
+				<td>COUNTRY</td>
+				<td> <input type="text" name="address[country]" value="<?php echo $vendorAddress->country ?>"</td>
+=			<tr>
 				<td>ZIP CODE</td>
 				<td> <input type="text" name="address[zip_code]" value="<?php echo $vendorAddress->zip_code ?>">  </td>
 			</tr>
