@@ -9,7 +9,7 @@ class Block_Vendor_Grid extends Block_Core_Grid
 		$this->_prepareColumns();
 		$this->_prepareActions();
 		$this->_prepareButtons();
-		$this->setTitle('Manage Vendor Method');
+		$this->setTitle('Manage Vendor');
 	}
 	public function getCollection()
 	{
