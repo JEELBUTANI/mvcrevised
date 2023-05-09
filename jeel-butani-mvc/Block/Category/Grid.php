@@ -9,7 +9,7 @@ class Block_Category_Grid extends Block_Core_Grid
 		$this->_prepareColumns();
 		$this->_prepareActions();
 		$this->_prepareButtons();
-		$this->setTitle('Manage Customer');
+		$this->setTitle('Manage Category');
 	}
 	public function getCollection()
 	{
