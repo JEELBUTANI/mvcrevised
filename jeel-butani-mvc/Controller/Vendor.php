@@ -5,37 +5,49 @@ class Controller_Vendor extends Controller_Core_Action
 	public function gridAction()
 	{
 		try {
-			$query = "SELECT * FROM `vendor`";
-			$vendors = Ccc::getModel('Vendor_Row')->fetchAll($query);
-			if (!$vendors) {
-				throw new Exception("Vendors not found", 1);
-			}
-			$this->getView()->setTemplate('vendor/grid.phtml')->setData(['vendors'=>$vendors]);
-			$this->render();
+			$layout = $this->getLayout();
+			$grid = $layout->createBlock('Vendor_Grid');
+			$layout->getChild('content')->addChild('grid',$grid);
+			$layout->render();
 		} catch (Exception $e) {
 	
-		}
-
+		}	
 	}
 
 	public function addAction()
 	{
-		$this->getView()->setTemplate('vendor/add.phtml');
-		$this->render();
+		$layout = $this->getLayout();
+		$vendor = Ccc::getModel('Vendor');
+		$address = Ccc::getModel('Vendor_Address');
+    	$add = $layout->createBlock('Vendor_Edit')->setData(['vendor'=>$vendor,'vendorAddress'=>$address]);
+		$layout->getChild('content')->addChild('add',$add);
+		$layout->render();
 	}
 
 	public function editAction()
 	{
 		try {
-			$id = $this->getRequest()->getParams('id');
-			$vendor = Ccc::getModel('Vendor_Row')->load($id);
-			$vendorAddress = Ccc::getModel('Vendor_Address_Row')->load($id);
-			$this->getView()->setTemplate('vendor/edit.phtml')->setData(['vendor' => $vendor,'vendorAddress' => $vendorAddress]);
-			$this->render();
+			$vendorId = (int) Ccc::getModel('Core_Request')->getParams('id');
+			if (!$vendorId) {
+				throw new Exception("Invalid Id", 1);
+				
+			}
+			$layout = $this->getLayout();
+			$vendor = Ccc::getModel('Vendor')->load($vendorId);
+			if (!$vendor) {
+				throw new Exception("Invalid Id", 1);
+			}
+			$address = Ccc::getModel('Vendor_Address')->load($vendorId);
+			if (!$address) {
+				throw new Exception("Invalid Id", 1);
+			}
+			$edit = $layout->createBlock('Vendor_Edit')->setData(['vendor'=>$vendor,'vendorAddress' => $address]);
+
+			$layout->getChild('content')->addChild('edit',$edit);
+			$layout->render();
 		} catch (Exception $e) {
 			
 		}
-
 	}
 
 	public function saveAction()
@@ -51,14 +63,14 @@ class Controller_Vendor extends Controller_Core_Action
 				throw new Exception("Invalid data posted.", 1);
 			}
 			if ($id = (int)$this->getRequest()->getParams('id')) {
-				$vendor = Ccc::getModel('Vendor_Row')->load($id);
+				$vendor = Ccc::getModel('Vendor')->load($id);
 				if (!$vendor) {
 					throw new Exception("Invalid id.", 1);
 				}
 			$vendor->updated_at = date("Y-m-d H:i:s");
 			}
 			else{
-				$vendor = Ccc::getModel('Vendor_Row');
+				$vendor = Ccc::getModel('Vendor');
 				$vendor->created_at = date("Y-m-d H:i:s");
 			}
 			$vendor->setData($postData);
@@ -71,24 +83,23 @@ class Controller_Vendor extends Controller_Core_Action
 				throw new Exception("Invalid data posted.", 1);
 			}
 			if ($id = (int)$this->getRequest()->getParams('id')) {
-				$vendorAddress = Ccc::getModel('Vendor_Address_Row')->load($id);
+				$vendorAddress = Ccc::getModel('Vendor_Address')->load($id);
 				if (!$vendorAddress) {
 					throw new Exception("Invalid id.", 1);
 				}
 			}
 			else{
-				$vendorAddress = Ccc::getModel('Vendor_Address_Row');
+				$vendorAddress = Ccc::getModel('Vendor_Address');
 				$vendorAddress->vendor_id = $vendor->vendor_id;
 			}
 			$vendorAddress->setData($postDataAddress);
 			if (!$vendorAddress->save()) {
 				throw new Exception("Unable to save vendor.", 1);
 			}
+			$this->redirect('grid','vendor',null,true);
 		} catch (Exception $e) {
 			
 		}
-			$this->redirect('grid','vendor',null,true);
-
 	}
 
 	public function deleteAction()
@@ -96,12 +107,12 @@ class Controller_Vendor extends Controller_Core_Action
 		if (!($id = (int) $this->getRequest()->getParams('id'))) {
 		throw new Exception("Error Processing Request", 1);
 		}
-		$vendor = Ccc::getModel('Vendor_Row')->load($id);
+		$vendor = Ccc::getModel('Vendor')->load($id);
 
 		if (!$vendor) {
 			throw new Exception("Error Processing Request", 1);
 		}
-		$vendorAddress = Ccc::getModel('Vendor_Address_Row')->load($id);
+		$vendorAddress = Ccc::getModel('Vendor_Address')->load($id);
 
 		$vendor->delete();
 		$vendorAddress->delete();

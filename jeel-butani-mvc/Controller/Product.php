@@ -6,13 +6,10 @@ class Controller_Product extends Controller_Core_Action
 	public function gridAction()
 	{
 		try {
-			$query = "SELECT * FROM `product`";
-			$products = Ccc::getModel('Product_Row')->fetchAll($query);
-			if (!$products) {
-				throw new Exception("Product not found.", 1);
-			}
-			$this->getView()->setTemplate('product/grid.phtml')->setData(['products'=>$products]);
-			$this->render();
+			$layout = $this->getLayout();
+			$grid = $layout->createBlock('Product_Grid');
+			$layout->getChild('content')->addChild('grid',$grid);
+			$layout->render();
 		} catch (Exception $e) {
 			
 		}
@@ -20,17 +17,31 @@ class Controller_Product extends Controller_Core_Action
 
 	public function addAction()
 	{
-		$this->getView()->setTemplate('product/add.phtml');
-		$this->render();
+		$layout = $this->getLayout();
+		$product = Ccc::getModel('Product');
+    	$add = $layout->createBlock('Product_Edit')->setData(['product'=>$product]);
+		$layout->getChild('content')->addChild('add',$add);
+		$layout->render();
 	}
 
 	public function editAction()
 	{
 		try {
-			$id = $this->getRequest()->getParams('id');
-			$product = Ccc::getModel('Product_Row')->load($id);
-			$this->getView()->setTemplate('product/edit.phtml')->setData(['product' =>$product]);
-			$this->render();
+			$productId = (int) Ccc::getModel('Core_Request')->getParams('id');
+			if (!$productId) {
+				throw new Exception("Invalid Id", 1);
+				
+			}
+			$layout = $this->getLayout();
+			$product = Ccc::getModel('Product')->load($productId);
+			if (!$product) {
+				throw new Exception("Invalid Id", 1);
+				
+			}
+			$edit = $layout->createBlock('Product_Edit')->setData(['product'=>$product]);
+
+			$layout->getChild('content')->addChild('edit',$edit);
+			$layout->render();
 		} catch (Exception $e) {
 			
 		}
@@ -45,14 +56,14 @@ class Controller_Product extends Controller_Core_Action
 			$postData = $this->getRequest()->getPost('product');
 
 			if ($id = $this->getRequest()->getParams('id')) {
-				$product = Ccc::getModel('Product_Row')->load($id);
+				$product = Ccc::getModel('Product')->load($id);
 				if (!$product) {
 					throw new Exception("Product not found.", 1);
 				}
 				$product->updated_at = date('Y-m-d H:i:s');
 			}
 			else{
-				$product = Ccc::getModel('product_Row');
+				$product = Ccc::getModel('product');
 				if (!$product) {
 					throw new Exception("Product not found", 1);
 				}
@@ -75,7 +86,7 @@ class Controller_Product extends Controller_Core_Action
 			if (!($id = (int)$this->getRequest()->getParams('id'))) {
 				throw new Exception("Id not found", 1);
 			}
-			$product = Ccc::getModel('Product_Row')->load($id);
+			$product = Ccc::getModel('Product')->load($id);
 			if (!$product) {
 				throw new Exception("Product not found", 1);
 			}

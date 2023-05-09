@@ -13,14 +13,14 @@ $shippingAddress = $this->shippingAddress;
 	<title>ADD</title>
 </head>
 <body>
-	<?php require 'view/html/header.phtml'; ?>
-	<table class="table">
+
+	<table class="table table-striped">
 		<tr>
 			<th>Customer Edit</th>
 		</tr>
 	</table>
 	<form action="index.php?c=customer&a=save&id=<?php echo $customer->customer_id ?>" method="POST">
-		<table class="table">
+		<table class="table table-striped">
 			<tr>
 				<td>FIRST NAME</td>
 				<td> <input type="text" name="customer[first_name]" value="<?php echo $customer->first_name ?>">  </td>
@@ -52,7 +52,7 @@ $shippingAddress = $this->shippingAddress;
 				<td>STATUS</td>
 				<td>
 					<select name="customer[status]">
-						<?php foreach ($customer->getTable()->getStatusOptions() as $key => $value):?>
+						<?php foreach ($customer->getResource()->getStatusOptions() as $key => $value):?>
 						<?php $selected = ($key == $customer->getstatus()) ? 'selected' : '';?>
 						<option value="<?php echo $key ?>"<?php echo $selected; ?>><?php echo $value;?></option>
 						<?php endforeach;?>
@@ -66,14 +66,14 @@ $shippingAddress = $this->shippingAddress;
 			</tr>
 		</table>
 
-		<table class="table">
+		<table class="table table-striped">
 		<tr>
 			<th>customer Address</th>
 		</tr>
 	</table>
-		<table class="table">
+		<table class="table table-striped">
 			<tr>
-				<td>BILLING ADDRESS</td>
+				<td>ADDRESS</td>
 				<td> <input type="text" name="billingAddress[address]" value="<?php echo $billingAddress->address ?>">  </td>
 			</tr>
 			<tr>
@@ -92,10 +92,14 @@ $shippingAddress = $this->shippingAddress;
 				<td>ZIP CODE</td>
 				<td> <input type="text" name="billingAddress[zip_code]" value="<?php echo $billingAddress->zip_code ?>">  </td>
 			</tr>
+
+
+				
 		</table>
-		<table class="table">
+
+		<table class="table table-striped">
 			<tr>
-				<td>SHIPPING ADDRESS</td>
+				<td>ADDRESS</td>
 				<td> <input type="text" name="shippingAddress[address]" value="<?php echo $shippingAddress->address ?>">  </td>
 			</tr>
 			<tr>
@@ -113,8 +117,14 @@ $shippingAddress = $this->shippingAddress;
 			<tr>
 				<td>ZIP CODE</td>
 				<td> <input type="text" name="shippingAddress[zip_code]" value="<?php echo $shippingAddress->zip_code ?>">  </td>
-			</tr>	
+			</tr>
+
+
+				
 		</table>
+
+
 	</form>
+
 </body>
 </html>

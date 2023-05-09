@@ -11,14 +11,13 @@ $product = $this->product;
 </head>
 <body>
 
-	<?php require 'view/html/header.phtml'; ?>
-	<table class="table">
+	<table class="table table-striped">
 		<tr>
 			<th>Product Edit</th>
 		</tr>
 	</table>
 	<form action="index.php?c=product&a=save&id=<?php echo $product->product_id; ?>" method="POST">
-		<table class="table">
+		<table class="table table-striped">
 			<tr>
 				<td>PRODUCT NAME</td>
 				<td> <input type="text" name="product[name]" value="<?php echo $product->name ?>">  </td>
@@ -39,7 +38,7 @@ $product = $this->product;
 				<td>STATUS</td>
 				<td>
 					<select name="product[status]">
-						<?php foreach ($product->getTable()->getStatusOptions() as $key => $value):?>
+						<?php foreach ($product->getResource()->getStatusOptions() as $key => $value):?>
 						<?php $selected = ($key == $product->getstatus()) ? 'selected' : '';?>
 						<option value="<?php echo $key ?>"<?php echo $selected; ?>><?php echo $value;?></option>
 						<?php endforeach;?>
@@ -66,5 +65,6 @@ $product = $this->product;
 			</tr>
 		</table>
 	</form>
+
 </body>
 </html>

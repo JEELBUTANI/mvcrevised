@@ -3,21 +3,33 @@
 class Model_Category extends Model_Core_Table
 {
 	const STATUS_ACTIVE = 1;
-	const STATUS_ACTIVE_LBL = 'Active';
-	const STATUS_INACTIVE = 2;
-	const STATUS_INACTIVE_LBL = 'Inactive';
-	const STATUS_DEFAULT = 1;
+    const STATUS_ACTIVE_LBL = 'Active';
+    const STATUS_INACTIVE =  2;
+    const STATUS_INACTIVE_LBL = 'Inactive';
+    const STATUS_DEFAULT= 1;
 
-	function __construct()
+	public function getStatus()
 	{
-		$this->setTableName('category');
-		$this->setPrimaryKey('category_id');
+		if ($this->status) {
+			return $this->status;
+		}
+		return Model_Category::STATUS_DEFAULT;
 	}
 
-	public function getStatusOptions()
+	public function getStatusText($status)
 	{
-		return [self::STATUS_ACTIVE => self::STATUS_ACTIVE_LBL,
-				self::STATUS_INACTIVE => self::STATUS_INACTIVE_LBL
-		];
+		$statuses = $this->getResource()->getStatusOptions();
+		if (array_key_exists($this->status,$statuses)) {
+			return $statuses[$this->status];
+		}
+		return $statuses[Model_Category::STATUS_DEFAULT];
 	}
+
+	public function __construct()
+   {
+      parent::__construct();
+
+      $this->setResourceClass('Model_Category_Resource');
+      $this->setCollectionClass('Model_Category_Collection');
+   }
 }

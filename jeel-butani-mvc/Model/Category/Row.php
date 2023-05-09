@@ -2,7 +2,7 @@
 
 class Model_Category_Row extends Model_Core_Table_Row
 {
-	function __construct()
+	function __construct(argument)
 	{
 		parent::__construct();
 		$this->setTableClass('Model_Category');

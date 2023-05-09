@@ -2,7 +2,9 @@
 $salesman = $this->salesman;
 $salesmanAddress = $this->salesmanAddress;
 ?>
+
 <!DOCTYPE html>
+
 <html>
 <head>
 	<meta charset="utf-8">
@@ -10,14 +12,15 @@ $salesmanAddress = $this->salesmanAddress;
 	<title>ADD</title>
 </head>
 <body>
+
 	<?php require 'view/html/header.phtml'; ?>
-	<table class="table">
+	<table class="table table-striped">
 		<tr>
 			<th>Salesman Edit</th>
 		</tr>
 	</table>
 	<form action="index.php?c=salesman&a=save&id=<?php echo $salesman->salesman_id ?>" method="POST">
-		<table class="table">
+		<table class="table table-striped">
 			<tr>
 				<td>FIRST NAME</td>
 				<td> <input type="text" name="salesman[first_name]" value="<?php echo $salesman->first_name ?>">  </td>
@@ -49,7 +52,7 @@ $salesmanAddress = $this->salesmanAddress;
 				<td>STATUS</td>
 				<td>
 					<select name="salesman[status]">
-						<?php foreach ($salesman->getTable()->getStatusOptions() as $key => $value):?>
+						<?php foreach ($salesman->getResource()->getStatusOptions() as $key => $value):?>
 						<?php $selected = ($key == $salesman->getstatus()) ? 'selected' : '';?>
 						<option value="<?php echo $key ?>"<?php echo $selected; ?>><?php echo $value;?></option>
 						<?php endforeach;?>
@@ -68,12 +71,12 @@ $salesmanAddress = $this->salesmanAddress;
 			</tr>
 		</table>
 
-		<table class="table">
+		<table class="table table-striped">
 		<tr>
 			<th>Salesman Address</th>
 		</tr>
 	</table>
-		<table class="table">
+		<table class="table table-striped">
 			<tr>
 				<td>ADDRESS</td>
 				<td> <input type="text" name="address[address]" value="<?php echo $salesmanAddress->address ?>">  </td>
@@ -94,7 +97,13 @@ $salesmanAddress = $this->salesmanAddress;
 				<td>ZIP CODE</td>
 				<td> <input type="text" name="address[zip_code]" value="<?php echo $salesmanAddress->zip_code ?>">  </td>
 			</tr>
+
+
+				
 		</table>
+
+
 	</form>
+
 </body>
 </html>

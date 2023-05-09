@@ -5,10 +5,10 @@ class Controller_Salesman extends Controller_Core_Action
 	public function gridAction()
 	{
 		try {
-			$sql = "SELECT * FROM `salesman`";
-			$salesmen = Ccc::getModel('Salesman_Row')->fetchAll($sql);
-			$this->getView()->setTemplate('salesman/grid.phtml')->setData(['salesmen' => $salesmen]);
-			$this->render();
+			$layout = $this->getLayout();
+			$grid = $layout->createBlock('Salesman_Grid');
+			$layout->getChild('content')->addChild('grid',$grid);
+			$layout->render();
 		} catch (Exception $e) {
 			
 		}
@@ -16,19 +16,23 @@ class Controller_Salesman extends Controller_Core_Action
 
 	public function addAction()
 	{
-		$this->getView()->setTemplate('salesman/add.phtml');
-		$this->render();
+		$layout = $this->getLayout();
+		$salesman = Ccc::getModel('Salesman');
+		$address = Ccc::getModel('Salesman_Address');
+    	$add = $layout->createBlock('Salesman_Edit')->setData(['salesman'=>$salesman,'salesmanAddress'=>$address]);
+		$layout->getChild('content')->addChild('add',$add);
+		$layout->render();
 	}
 
 	public function editAction()
 	{
 		try {
 			$id = $this->getRequest()->getParams('id');
-			$salesman = Ccc::getModel('Salesman_Row')->load($id);
+			$salesman = Ccc::getModel('Salesman')->load($id);
 			if (!$salesman) {
 				throw new Exception("Salesman not found.", 1);
 			}
-			$salesmanAddress = Ccc::getModel('Salesman_Address_Row')->load($id);
+			$salesmanAddress = Ccc::getModel('Salesman_Address')->load($id);
 			if (!$salesmanAddress) {
 				throw new Exception("Salesman address not found", 1);
 			}
@@ -53,11 +57,11 @@ class Controller_Salesman extends Controller_Core_Action
 			}
 
 			if ($id = $this->getRequest()->getParams('id')) {
-				$salesman = Ccc::getModel('Salesman_Row')->load($id);
+				$salesman = Ccc::getModel('Salesman')->load($id);
 				$salesman->updated_at = date("Y-m-d H-i-s");
 			}
 			else{
-				$salesman = Ccc::getModel('Salesman_Row');
+				$salesman = Ccc::getModel('Salesman');
 				$salesman->created_at = date("Y-m-d H-i-s"); 
 			}
 
@@ -72,10 +76,10 @@ class Controller_Salesman extends Controller_Core_Action
 			}
 
 			if ($id = $this->getRequest()->getParams('id')) {
-				$salesmanAddress = Ccc::getModel('Salesman_Address_Row')->load($id);
+				$salesmanAddress = Ccc::getModel('Salesman_Address')->load($id);
 			}
 			else{
-				$salesmanAddress = Ccc::getModel('Salesman_Address_Row');
+				$salesmanAddress = Ccc::getModel('Salesman_Address');
 				$salesmanAddress->salesman_id = $salesman->salesman_id; 
 			}
 
@@ -95,13 +99,13 @@ class Controller_Salesman extends Controller_Core_Action
 			if (!($id = $this->getRequest()->getParams('id'))) {
 				throw new Exception("Id not found", 1);
 			}
-			$salesman = Ccc::getModel('Salesman_Row')->load($id);
+			$salesman = Ccc::getModel('Salesman')->load($id);
 			if (!$salesman) {
 				throw new Exception("Error Processing Request", 1);
 			}
 			$salesman->delete();
 
-			$salesmanAddress = Ccc::getModel('Salesman_Address_Row');
+			$salesmanAddress = Ccc::getModel('Salesman_Address');
 			if (!$salesmanAddress) {
 				throw new Exception("Salesman Address not saved", 1);
 			}

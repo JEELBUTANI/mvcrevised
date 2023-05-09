@@ -13,14 +13,14 @@ $vendorAddress = $this->vendorAddress;
 </head>
 <body>
 
-	<?php require 'view/html/header.phtml'; ?>
-	<table class="table">
+
+	<table class="table table-striped">
 		<tr>
 			<th>Vendor Edit</th>
 		</tr>
 	</table>
 	<form action="index.php?c=vendor&a=save&id=<?php echo $vendor->vendor_id ?>" method="POST">
-		<table class="table">
+		<table class="table table-striped">
 			<tr>
 				<td>FIRST NAME</td>
 				<td> <input type="text" name="vendor[first_name]" value="<?php echo $vendor->first_name ?>">  </td>
@@ -52,7 +52,7 @@ $vendorAddress = $this->vendorAddress;
 				<td>STATUS</td>
 				<td>
 					<select name="vendor[status]">
-						<?php foreach ($vendor->getTable()->getStatusOptions() as $key => $value):?>
+						<?php foreach ($vendor->getResource()->getStatusOptions() as $key => $value):?>
 						<?php $selected = ($key == $vendor->getstatus()) ? 'selected' : '';?>
 						<option value="<?php echo $key ?>"<?php echo $selected; ?>><?php echo $value;?></option>
 						<?php endforeach;?>
@@ -71,12 +71,12 @@ $vendorAddress = $this->vendorAddress;
 			</tr>
 		</table>
 
-		<table class="table">
+		<table class="table table-striped">
 		<tr>
 			<th>Vendor Address</th>
 		</tr>
 	</table>
-		<table class="table">
+		<table class="table table-striped">
 			<tr>
 				<td>ADDRESS</td>
 				<td> <input type="text" name="address[address]" value="<?php echo $vendorAddress->address ?>">  </td>

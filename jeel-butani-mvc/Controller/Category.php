@@ -1,109 +1,95 @@
 <?php
+
 class Controller_Category extends Controller_Core_Action
 {
 	public function gridAction()
 	{
-		try 
-		{
-			$categoryRow = Ccc::getModel('Category_Row');
-			$query = "SELECT * FROM `category`";
-			$categories = $categoryRow->fetchAll($query);
-			
-			$this->getView()->setTemplate('category/grid.phtml')->setData($categories);
-			$this->render();
-		} 
-		catch (Exception $e) 
-		{
-			throw new Exception("Could not fetch categories", 1);
-		}
-		$this->getView()->getTemplate('category/grid.phtml');
+		$layout = $this->getLayout();
+		$grid = $layout->createBlock('Category_Grid');
+		$layout->getChild('content')->addChild('grid',$grid);
+		$layout->render();
 	}
 
 	public function addAction()
 	{
-		$this->getView()->setTemplate('category/add.phtml');
-		$this->render();
+		$layout = $this->getLayout();
+		$category = Ccc::getModel('Category');
+    	$add = $layout->createBlock('Category_Edit')->setData(['category'=>$category]);
+		$layout->getChild('content')->addChild('add',$add);
+		$layout->render();
 	}
 
 	public function editAction()
-	{try 
-		{
-			$categoryRow = Ccc::getModel('Category_Row');
-			$request = $this->getRequest();
-			$category_id = $request->getParams('id');
-			if (!$category_id) 
-			{
-				throw new Exception("ID Not There", 1);
-			}
-			$category = $categoryRow->load($category_id);
-			$query = "SELECT * FROM `category` WHERE `category_id` = {$category_id}";
-			$categorys = $categoryRow->fetchRow($query);
-			if(!$categorys)
-			{
-				throw new Exception("category Not There", 1);
-			}
-			$this->getView()->setTemplate('category/edit.phtml')->setData($category);
-			$this->render();
-		} 
-		catch (Exception $e) 
-		{
-			throw new Exception("category Not Found", 1);			
-		}
-		$this->getView()->getTemplate('category/edit.phtml');
-	}
-
-		public function saveAction()
 	{
-		try{
-			$request=Ccc::getModel('Core_Request');
-			$data = $request->getPost('category');
+		try {
+			$categoryId = (int) Ccc::getModel('Core_Request')->getParams('id');
+			if (!$categoryId) {
+				throw new Exception("Invalid Id", 1);
+				
+			}
+			$layout = $this->getLayout();
+			$category = Ccc::getModel('Category')->load($categoryId);
+			if (!$category) {
+				throw new Exception("Invalid Id", 1);
+				
+			}
+			$edit = $layout->createBlock('Category_Edit')->setData(['category'=>$category]);
 
-			if (!$data) {
-				throw new Exception("no data posted");
-			}
-			$id = $request->getParams('id');
-			if ($id) 
-			{
-				$category=Ccc::getModel('Category_Row')->load($id);
-				$category->updated_at=date('Y-m-d H:i:s');
-			}
-			else
-			{
-				$category= Ccc::getModel('Category_Row');
-				$category->created_at = date("Y-m-d h:i:s");
-			}
-			$category->setData($data);
-			$category->save();			
+			$layout->getChild('content')->addChild('edit',$edit);
+			$layout->render();
+		} catch (Exception $e) {
+			
 		}
-		catch(Exception $e){	
-				echo "catch found";
-		}
-		header("Location: index.php?c=category&a=grid");
 	}
-	
-	public function deleteAction()
-	 {
-	 	try 
-		{
-			$categoryRow = Ccc::getModel('Category_Row');
-			$request = $this->getRequest();
-			$category_id = $request->getParams('id');
-			if (!$category_id) 
-			{
-				throw new Exception("ID could not get.", 1);
+
+	public function saveAction()
+	{
+		try {
+			if (!$this->getRequest()->isPost()) {
+				throw new Exception("Invalid Request.", 1);
 			}
-			$category = $categoryRow->load($category_id)->delete();
-			if (!$category) 
-			{
-				throw new Exception("category Not Deleted.", 1);
+			$postData = $this->getRequest()->getPost('category');
+
+			if ($id = $this->getRequest()->getParams('id')) {
+				$category = Ccc::getModel('Category')->load($id);
+				if (!$category) {
+					throw new Exception("Category not found.", 1);
+				}
+				$category->updated_at = date('Y-m-d H:i:s');
 			}
-			header("Location: index.php?c=category&a=grid");
-		} 
-		catch (Exception $e) 
-		{
-			throw new Exception("Category Not Deleted.", 1);	
+			else{
+				$category = Ccc::getModel('Category');
+				if (!$category) {
+					throw new Exception("Category not found", 1);
+				}
+				$category->created_at = date("Y-m-d H-i-s");
+			}
+			$category->setData($postData);
+			if (!$category->save()) {
+				throw new Exception("Category not saved.", 1);
+			}
+			$this->redirect('grid','category',null,true);
+		} catch (Exception $e) {
+				
 		}
-		header("Location: index.php?c=category&a=grid");
+	}
+
+
+	public function deleteAction()
+	{
+		try {
+			if (!($id = (int)$this->getRequest()->getParams('id'))) {
+				throw new Exception("Id not found", 1);
+			}
+			$category = Ccc::getModel('Category')->load($id);
+			if (!$category) {
+				throw new Exception("Category not found", 1);
+			}
+			$category->delete();
+			
+		} catch (Exception $e) {
+			
+		}
+	$this->redirect('grid','category',null,true);
 	}
 }
-?>
