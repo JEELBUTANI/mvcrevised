@@ -9,7 +9,7 @@ class Block_Customer_Grid extends Block_Core_Grid
 		$this->_prepareColumns();
 		$this->_prepareActions();
 		$this->_prepareButtons();
-		$this->setTitle('Manage Customer Method');
+		$this->setTitle('Manage Customer');
 	}
 	public function getCollection()
 	{
