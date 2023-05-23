@@ -9,7 +9,7 @@ class Block_Core_Eav_Attribute_Grid extends Block_Core_Grid
 		$this->_prepareColumns();
 		$this->_prepareActions();
 		$this->_prepareButtons();
-		$this->setTitle('Manage Eav Attribute Method');
+		$this->setTitle('Manage Eav Attribute');
 	}
 
 	public function getCollection()
