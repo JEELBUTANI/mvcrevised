@@ -124,7 +124,7 @@ class Controller_Core_Action
 
    public function redirect($action = null,$controller = null,$params = [],$reset = false)
    {
-      $url = $this->getUrl($action,$controller,$params,$reset);
+      $url = $this->getUrl()->getUrl($action,$controller,$params,$reset);
       header("location:{$url}");
       exit();
    }
