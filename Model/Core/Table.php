@@ -36,7 +36,7 @@ class Model_Core_Table
 			return $this->resourceClass;
 		}
 
-		$resourceClass = new ($this->resourceClass)();
+		$resourceClass = new $this->resourceClass();
 		$this->setResourceClass($resourceClass);
 		return $resourceClass;
 	}
@@ -53,7 +53,7 @@ class Model_Core_Table
 			return $this->collectionClass;
 		}
 
-		$collectionClass = new ($this->collectionClass)();
+		$collectionClass = new $this->collectionClass();
 		$this->setCollectionClass($collectionClass);
 		return $collectionClass;
 	}
@@ -80,7 +80,7 @@ class Model_Core_Table
 			return $this->resource;
 		}
 
-		$resource = new ($this->resourceClass)();
+		$resource = new $this->resourceClass();
 		$this->setResource($resource);
 		return $resource;
 	}
